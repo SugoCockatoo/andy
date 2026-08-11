@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andy Learning Methods - Tiple</title>
+    
+    <!-- Google Font (using the same font family from the first design) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Philosophy: Reusing color palette from the first design */
+            --bg-color: #fdf6ec; /* Cream */
+            --text-dark: #3a2e2b; /* Dark brown */
+            --text-muted: #66554e; /* Muted brown */
+            --accent-orange: #d97736; /* Warm orange */
+            --card-bg: #fffbf7; /* Off-white card */
+            --card-border: #f3e5d8; /* Card border */
+            --sidebar-dark: #5b3e31; /* Dark sidebar */
+            --sidebar-active-light: #e5a97a; /* Light accent on dark */
+            --sidebar-icon-muted: #8c7b74; /* Muted brown for sidebar icons */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: flex-start; /* Sidebar is left-aligned */
+            overflow: hidden; /* Main page scroll, but prevent x scroll */
+            position: relative;
+            color: var(--text-dark);
+        }
+
+        /* --- Left Fixed Sidebar --- */
+        .sidebar {
+            width: 90px;
+            background-color: var(--sidebar-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .mascot-avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .mascot-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .nav-item {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .nav-item img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        .nav-item.active {
+            background-color: var(--sidebar-active-bg);
+        }
+
+        .icon-svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--accent-orange);
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- Main Content Section --- */
+        .main-content {
+            margin-left: 90px; /* Offset for sidebar */
+            flex: 1;
+            padding: 40px 60px;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr; /* Matches the visual layout ratio */
+            gap: 40px;
+            align-items: center; /* Center vertically in main area */
+            max-width: 1300px;
+            width: 100%;
+        }
+
+        /* --- Column 1: Instrument Feature Card --- */
+        .instrument-card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 35px;
+            padding: 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 420px;
+            min-height: 550px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 25px rgba(217, 119, 54, 0.05);
+            margin-top: 40px;
+        }
+        
+        .instrument-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(217, 119, 54, 0.1);
+        }
+
+        .instrument-name {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        
+        /* Orange underlined pillar like Design 1 */
+        .instrument-name::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -10px;
+            width: 60px;
+            height: 6px;
+            background-color: var(--accent-orange);
+            border-radius: 10px;
+        }
+
+        .featured-instrument {
+            max-width: 100%;
+            height: auto;
+            transform: rotate(-10deg);
+        }
+
+
+        /* --- Column 2: Learning Methods Section --- */
+        .learning-methods-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            max-width: 650px;
+        }
+
+        .methods-header {
+            text-align: left;
+        }
+
+        .methods-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .methods-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Methods Grid */
+        .methods-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .method-item {
+            background-color: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .method-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-light-orange);
+            background-color: #fffefb;
+        }
+
+        .method-icon-wrapper {
+            font-size: 2.2rem;
+            color: var(--accent-orange);
+            line-height: 1;
+        }
+
+        .method-text {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1; /* Take up available space */
+        }
+
+        .method-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .method-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Forward arrow like Design 1 */
+        .method-arrow {
+            color: var(--sidebar-icon-muted);
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+
+        /* Bottom Decorative Shapes from design 1 */
+        .decorative-shapes {
+            position: fixed;
+            bottom: -50px;
+            left: -80px;
+            width: 400px;
+            height: 250px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .decorative-shapes path { fill: var(--sidebar-active-light); opacity: 0.1; }
+
+
+        /* --- Responsive Media Queries --- */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr; /* Stack columns */
+                justify-items: center; /* Center stacked elements */
+                padding: 40px;
+            }
+            
+            .instrument-card {
+                margin-top: 0;
+                min-height: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: 70px;
+                flex-direction: row;
+                top: auto;
+                bottom: 0;
+                padding: 10px 20px;
+                justify-content: space-around;
+            }
+
+            .main-content {
+                margin-left: 0;
+                margin-bottom: 70px; /* Space for bottom nav */
+                padding: 20px;
+            }
+
+            .methods-grid {
+                grid-template-columns: 1fr; /* Single column methods */
+            }
+
+            .instrument-name {
+                font-size: 2.2rem;
+            }
+
+            .methods-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* --- Utility Font Classes (simple emoji/unicode icons for now) --- */
+        /* Use standard web-font icons or SVG sprites for a real implementation */
+        .fa-eye::before { content: '👁️'; }
+        .fa-ear-listen::before { content: '👂️'; }
+        .fa-hand-pointer::before { content: '👆️'; }
+        .fa-music::before { content: '🎵'; }
+        .fa-chevron-right::before { content: '▶'; } /* Unicode arrow */
+
+    </style>
+</head>
+<body>
+
+    <!-- --- Decorative Bottom Background Elements from Design 1 --- -->
+    <svg class="decorative-shapes" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M-50 300 C 100 280, 120 180, 0 120 C -50 90, -80 120, -100 150 Z"/>
+    </svg>
+
+
+    <!-- --- Multi-Column Main Content Section --- -->
+    <div class="main-content">
+        
+        <!-- Column 1: Featured Instrument -->
+        <div class="instrument-card">
+            <h1 class="instrument-name" id="selected-instrument-name">Tiple</h1>
+            <!-- PNG placeholder for selected instrument icon -->
+            <img src="https://cdn-icons-png.flaticon.com/512/11219/11219593.png" alt="Featured Tiple" class="featured-instrument" id="selected-instrument-icon">
+        </div>
+
+        <!-- Column 2: Learning Methods Section -->
+        <div class="learning-methods-wrapper">
+            <header class="methods-header">
+                <h2 class="methods-title">¿Cómo te gusta aprender?</h2>
+                <p class="methods-subtitle">Elige la forma que mejor se adapte a ti</p>
+            </header>
+
+            <!-- Methods Grid -->
+            <div class="methods-grid">
+                
+                <!-- Method 1: Viendo -->
+                <a class="method-item" href="index_4.html">
+                    <div class="method-icon-wrapper">
+                        <i class="fa fa-eye"></i>
+                    </div>
+                    <div class="method-text">
+                        <div class="method-name">Aprender viendo</div>
+                        <div class="method-desc">Lecciones en video y demostraciones.</div>
+                    </div>
+                    <i class="method-arrow fa fa-chevron-right"></i>
+                </a>
+
+                <!-- Method 2: Escuchando -->
+                <a class="method-item" href="index_4.html">
+                    <div class="method-icon-wrapper">
+                        <i class="fa fa-ear-listen"></i>
+                    </div>
+                    <div class="method-text">
+                        <div class="method-name">Aprender escuchando</div>
+                        <div class="method-desc">Escucha, analiza y repite las canciones.</div>
+                    </div>
+                    <i class="method-arrow fa fa-chevron-right"></i>
+                </a>
+
+                <!-- Method 3: Practicando -->
+                <a class="method-item" href="index_4.html">
+                    <div class="method-icon-wrapper">
+                        <i class="fa fa-hand-pointer"></i>
+                    </div>
+                    <div class="method-text">
+                        <div class="method-name">Aprender practicando</div>
+                        <div class="method-desc">Ejercicios guiados paso a paso.</div>
+                    </div>
+                    <i class="method-arrow fa fa-chevron-right"></i>
+                </a>
+
+                <!-- Method 4: Tocando -->
+                <a class="method-item" href="index_4.html">
+                    <div class="method-icon-wrapper">
+                        <i class="fa fa-music"></i>
+                    </div>
+                    <div class="method-text">
+                        <div class="method-name">Aprender tocando</div>
+                        <div class="method-desc">Toca canciones completas desde el principio.</div>
+                    </div>
+                    <i class="method-arrow fa fa-chevron-right"></i>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+
+    <aside class="sidebar">
+        <div class="sidebar-nav">
+            <!-- Mascot Profile Header -->
+            <div class="mascot-avatar">
+                <img src="https://cdn-icons-png.flaticon.com/512/560/560938.png" alt="Mascot Avatar">
+            </div>
+
+            <!-- Navigation Links -->
+            <a class="nav-item" href="index.html" aria-label="Inicio">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+            </a>
+            <a class="nav-item" data-instrument="tiple" href="index_2.html?instrument=tiple" aria-label="Tiple">
+                <img src="https://cdn-icons-png.flaticon.com/512/11219/11219593.png" alt="Tiple">
+            </a>
+            <a class="nav-item" data-instrument="bandola" href="index_2.html?instrument=bandola" aria-label="Bandola">
+                <img src="https://cdn-icons-png.flaticon.com/512/6724/6724678.png" alt="Bandola">
+            </a>
+            <a class="nav-item" data-instrument="guitarra" href="index_2.html?instrument=guitarra" aria-label="Guitarra">
+                <img src="https://cdn-icons-png.flaticon.com/512/1894/1894732.png" alt="Guitarra">
+            </a>
+        </div>
+
+        <!-- Sidebar Footer Action -->
+        <div class="sidebar-nav">
+            <a class="nav-item" href="/chat" aria-label="Chat">
+                <svg class="icon-svg" viewBox="0 0 24 24" style="fill: #f4c295; width: 22px; height: 22px;">
+                    <path d="M20 2H4a2 2 0 0 0-2 2v14l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+                </svg>
+            </a>
+            <a class="nav-item" href="index_3.html" aria-label="Estadísticas">
+                <svg class="icon-svg" viewBox="0 0 24 24" style="fill: #f4c295; width: 24px; height: 24px;">
+                    <path d="M4 21h4V10H4v11zm6 0h4V3h-4v18zm6 0h4v-7h-4v7z"/>
+                </svg>
+            </a>
+        </div>
+    </aside>
+
+    <script>
+        (function() {
+            const instrumentMap = {
+                tiple: {
+                    name: 'Tiple',
+                    src: 'https://cdn-icons-png.flaticon.com/512/11219/11219593.png',
+                    alt: 'Tiple'
+                },
+                bandola: {
+                    name: 'Bandola',
+                    src: 'https://cdn-icons-png.flaticon.com/512/6724/6724678.png',
+                    alt: 'Bandola andina'
+                },
+                guitarra: {
+                    name: 'Guitarra',
+                    src: 'https://cdn-icons-png.flaticon.com/512/1894/1894732.png',
+                    alt: 'Guitarra'
+                }
+            };
+
+            const params = new URLSearchParams(window.location.search);
+            const paramInstrument = params.get('instrument') ? params.get('instrument').toLowerCase() : null;
+            let selectedInstrument = paramInstrument || localStorage.getItem('selectedInstrument') || 'tiple';
+            if (!instrumentMap[selectedInstrument]) {
+                selectedInstrument = 'tiple';
+            }
+            localStorage.setItem('selectedInstrument', selectedInstrument);
+
+            const selectedName = document.getElementById('selected-instrument-name');
+            const selectedIcon = document.getElementById('selected-instrument-icon');
+            if (selectedName && selectedIcon) {
+                selectedName.textContent = instrumentMap[selectedInstrument].name;
+                selectedIcon.src = instrumentMap[selectedInstrument].src;
+                selectedIcon.alt = instrumentMap[selectedInstrument].alt;
+                document.title = 'Andy Learning Methods - ' + instrumentMap[selectedInstrument].name;
+            }
+
+            document.querySelectorAll('.sidebar-nav .nav-item[data-instrument]').forEach((item) => {
+                const instrument = item.dataset.instrument;
+                if (!instrumentMap[instrument]) {
+                    return;
+                }
+                if (instrument === selectedInstrument) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
