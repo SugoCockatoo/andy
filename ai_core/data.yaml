@@ -1,0 +1,6 @@
+path: C:/Users/betas/OneDrive/Documentos/Elite_Grup/bogota_wro/ai_core
+train: train/images
+val: val/images
+
+names:
+  0: bandola_andina

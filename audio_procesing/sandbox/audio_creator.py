@@ -3,7 +3,7 @@ from scipy.io.wavfile import write
 
 # Audio parameters
 fs = 44100  # Sample rate (44.1kHz)
-seconds = 120  # Duration of recording
+seconds = 30  # Duration of recording
 
 print("Recording...")
 # Record raw audio (1 channel / mono) without any software filters
@@ -12,4 +12,4 @@ sd.wait()  # Wait until the recording is finished
 print("Finished recording!")
 
 # Save as a standard uncompressed WAV file
-write('output_raw.wav', fs, myrecording)
+write('autumn.wav', fs, myrecording)

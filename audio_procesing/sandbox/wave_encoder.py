@@ -5,7 +5,7 @@ import numpy as np
 
 # 1. Load the audio file
 # librosa automatically converts audio to mono and resamples to 22050 Hz by default
-audio_path = "output_raw.wav"
+audio_path = r"C:\Users\betas\OneDrive\Documentos\Elite_Grup\bogota_wro\audio_procesing\sandbox\output_raw.wav"
 y, sr = librosa.load(audio_path)
 
 # 2. Compute the Short-Time Fourier Transform (STFT)
